@@ -4,17 +4,27 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
+  <nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+      <RouterLink class="navbar-brand" to="#">
+        <img
+          src="@/assets/logo.svg"
+          alt="Logo"
+          width="30"
+          height="24"
+          class="d-inline-block align-text-top"
+        />
+        PokeApi
+      </RouterLink>
+      <div>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
-      </nav>
+        <RouterLink to="/pokemons">Pokemons</RouterLink>
+      </div>
     </div>
+  </nav>
+  <header>
+    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
   </header>
 
   <RouterView />
@@ -24,6 +34,10 @@ import HelloWorld from './components/HelloWorld.vue'
 header {
   line-height: 1.5;
   max-height: 100vh;
+}
+.row {
+  display: flex;
+  flex-direction: row;
 }
 
 .logo {
