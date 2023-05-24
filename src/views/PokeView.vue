@@ -1,6 +1,4 @@
 <script setup>
-import axios from 'axios'
-import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -26,23 +24,48 @@ const back = () => {
 
 getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
 </script>
-
 <template>
   <div v-if="loading">Cargando...</div>
   <div v-else class="data-pokemon">
-    <h1 class="name-pokemon">{{ $route.params.name }}</h1>
-    <img :src="data.sprites?.front_default" />
+    <div class="container-btn-return">
+      <button class="btn-poke" @click="back">Volver</button>
+    </div>
+    <div v-if="data" class="pokemon-container">
+      <img :src="data.sprites?.front_default" />
+      <h1>{{ $route.params.name.toLocaleUpperCase() }}</h1>
+    </div>
   </div>
-  <button @click="back">volver</button>
 </template>
-
 <style>
+/* * {
+  border: 1px solid red;
+} */
+.container-btn-return {
+  padding: 1rem;
+  border-radius: 10px;
+}
+.pokemon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.btn-navegation {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem;
+}
 .data-pokemon {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
 }
-
-.name-pokemon {
-  text-align: center;
+.btn-poke {
+  border-radius: 10px;
+  background-color: darkcyan;
+  color: aliceblue;
+  border: 0px;
+  padding: 0.5rem;
 }
 </style>
