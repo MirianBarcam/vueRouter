@@ -1,5 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -8,10 +9,45 @@ import { useGetData } from '@/composables/getData'
 const { data, getData, loading } = useGetData()
 
 // const pokemon = ref({})
+getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
 
 const back = () => {
   router.push('/pokemons')
 }
+
+const addPokeToFavorites = (poke) => {
+  let contentSaved = readListPokes()
+  console.log('contenido recuperado:', contentSaved)
+  if (contentSaved) {
+    if (checkRepeatPoke(poke)) {
+      addPokeToList(poke, contentSaved)
+    }
+  } else {
+    let favoritesListPoke = []
+    addPokeToList(poke, favoritesListPoke)
+  }
+}
+
+const readListPokes = () => {
+  return JSON.parse(localStorage.getItem('favoritesListPoke'))
+}
+const checkRepeatPoke = (poke) => {
+  const pokeList = readListPokes()
+  const pokeRepeat = pokeList.filter((e) => {
+    console.log('id buscado, id de pokemon:', e.id, poke.id)
+    e.id === poke.id
+  })
+  console.log('el pokemon repetido:', pokeRepeat)
+  return pokeRepeat
+}
+const addPokeToList = (poke, list) => {
+  list.push(poke)
+  localStorage.setItem('favoritesListPoke', JSON.stringify(list))
+}
+
+// const deletePokeToFavorites=(poke)=>{
+//   localStorage.setItem('favoritesListPoke', JSON.stringify(contentSaved))
+// }
 
 // const getData = async () => {
 //   try {
@@ -21,8 +57,6 @@ const back = () => {
 //     console.log(error)
 //   }
 // }
-
-getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
 </script>
 <template>
   <div v-if="loading">Cargando...</div>
@@ -34,6 +68,9 @@ getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
       <img :src="data.sprites?.front_default" />
       <h1>{{ $route.params.name.toLocaleUpperCase() }}</h1>
     </div>
+    <button class="btn-favorite-add btn-poke" @click="addPokeToFavorites(data)">
+      Agregar a favoritos
+    </button>
   </div>
 </template>
 <style>
@@ -67,5 +104,6 @@ getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
   color: aliceblue;
   border: 0px;
   padding: 0.5rem;
+  max-width: 10rem;
 }
 </style>

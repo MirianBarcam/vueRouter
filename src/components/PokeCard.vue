@@ -10,7 +10,7 @@ const props = defineProps(['imgPoke', '', 'namePoke'])
 <template>
   <div class="card-container">
     <div class="card-container-wrapper-img">
-      <img :src="imgPoke" class="card-container-img" />
+      <img :src="imgPoke" class="card-img" />
     </div>
 
     <h3>{{ namePoke }}</h3>
@@ -31,20 +31,20 @@ const props = defineProps(['imgPoke', '', 'namePoke'])
   background-color: rgba(191, 199, 195, 0.355);
 }
 .card-container:hover {
-  transition: 0.5s;
+  transition: 0.2s;
   width: 30.2rem;
   height: 5.2rem;
 }
 @supports (object-fit: cover) {
   .card-container-wrapper-img {
-    width: 3rem;
-    height: 100%;
+    width: 3.5rem;
     object-fit: cover;
     object-position: center center;
   }
 }
-.card-container-img {
+.card-img {
   width: 100%;
   height: auto;
+  border-radius: 100%;
 }
 </style>
