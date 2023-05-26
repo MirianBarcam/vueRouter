@@ -1,22 +1,25 @@
 <script setup>
 const props = defineProps(['imgPoke', '', 'namePoke'])
-//const emit = defineEmits(['prevPage', 'nextPage'])
+const emit = defineEmits(['pokeClicked'])
 
-/*const activarsiguiente = () => {
-  emit('nextPage')
-}*/
+const pokeSelected = () => {
+  emit('pokeClicked', { poke })
+}
 </script>
 
 <template>
-  <div class="card-container">
+  <div class="card-container" @click="pokeSelected">
     <div class="card-container-wrapper-img">
       <img :src="imgPoke" class="card-img" />
     </div>
 
-    <h3>{{ namePoke }}</h3>
+    <h5>{{ namePoke }}</h5>
   </div>
 </template>
 <style>
+/* * {
+  border: 1px solid red;
+} */
 .card-container {
   display: flex;
   flex-direction: row;
@@ -29,11 +32,12 @@ const props = defineProps(['imgPoke', '', 'namePoke'])
   gap: 2rem;
   overflow: hidden;
   background-color: rgba(191, 199, 195, 0.355);
+  margin-top: 1rem;
 }
 .card-container:hover {
   transition: 0.2s;
-  width: 30.2rem;
-  height: 5.2rem;
+  transform: scale(1.1);
+  background-color: rgb(180, 180, 211);
 }
 @supports (object-fit: cover) {
   .card-container-wrapper-img {

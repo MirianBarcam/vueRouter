@@ -1,10 +1,16 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useGetData } from '@/composables/getData'
+import { useFavoritesStore } from '../store/favorites'
+const useFavorites = useFavoritesStore()
 
 const route = useRoute()
 const router = useRouter()
-import { useGetData } from '@/composables/getData'
+const addPokeRepeat = ref(false)
+const addedPoke = ref(false)
+
+const namePoke = route.params.name.toLocaleUpperCase()
 
 const { data, getData, loading } = useGetData()
 
@@ -14,49 +20,6 @@ getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
 const back = () => {
   router.push('/pokemons')
 }
-
-const addPokeToFavorites = (poke) => {
-  let contentSaved = readListPokes()
-  console.log('contenido recuperado:', contentSaved)
-  if (contentSaved) {
-    if (checkRepeatPoke(poke)) {
-      addPokeToList(poke, contentSaved)
-    }
-  } else {
-    let favoritesListPoke = []
-    addPokeToList(poke, favoritesListPoke)
-  }
-}
-
-const readListPokes = () => {
-  return JSON.parse(localStorage.getItem('favoritesListPoke'))
-}
-const checkRepeatPoke = (poke) => {
-  const pokeList = readListPokes()
-  const pokeRepeat = pokeList.filter((e) => {
-    console.log('id buscado, id de pokemon:', e.id, poke.id)
-    e.id === poke.id
-  })
-  console.log('el pokemon repetido:', pokeRepeat)
-  return pokeRepeat
-}
-const addPokeToList = (poke, list) => {
-  list.push(poke)
-  localStorage.setItem('favoritesListPoke', JSON.stringify(list))
-}
-
-// const deletePokeToFavorites=(poke)=>{
-//   localStorage.setItem('favoritesListPoke', JSON.stringify(contentSaved))
-// }
-
-// const getData = async () => {
-//   try {
-//     const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`)
-//     pokemon.value = data
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
 </script>
 <template>
   <div v-if="loading">Cargando...</div>
@@ -66,17 +29,27 @@ const addPokeToList = (poke, list) => {
     </div>
     <div v-if="data" class="pokemon-container">
       <img :src="data.sprites?.front_default" />
-      <h1>{{ $route.params.name.toLocaleUpperCase() }}</h1>
+      <h1>{{ namePoke }}</h1>
     </div>
-    <button class="btn-favorite-add btn-poke" @click="addPokeToFavorites(data)">
+    <button class="btn-favorite-add btn-poke" @click="useFavorites.addPokeToFavorites(data)">
       Agregar a favoritos
     </button>
+    <p v-if="addPokeRepeat" class="msg-favorite-repeat">
+      {{ namePoke }} ya se ha añadido a favoritos anteriormente
+    </p>
+    <p v-if="addedPoke" class="msg-added-favorite">{{ namePoke }} ha sido añadido a favoritos</p>
   </div>
 </template>
 <style>
 /* * {
   border: 1px solid red;
 } */
+.msg-added-favorite {
+  color: green;
+}
+.msg-favorite-repeat {
+  color: red;
+}
 .container-btn-return {
   padding: 1rem;
   border-radius: 10px;
