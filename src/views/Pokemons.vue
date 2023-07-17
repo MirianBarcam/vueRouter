@@ -3,14 +3,6 @@ import { RouterLink } from 'vue-router'
 import { useGetData } from '@/composables/getData'
 
 const { data, getData, loading } = useGetData()
-// const getData = async () => {
-//   try {
-//     const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon')
-//     pokemons.value = data.results
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
 
 getData('https://pokeapi.co/api/v2/pokemon')
 </script>
