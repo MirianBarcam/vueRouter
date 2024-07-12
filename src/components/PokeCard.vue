@@ -16,6 +16,7 @@ const pokeSelected = () => {
     <h5>{{ namePoke }}</h5>
   </div>
 </template>
+
 <style>
 /* * {
   border: 1px solid red;
